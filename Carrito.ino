@@ -3,6 +3,7 @@
 #include <Adafruit_GFX.h>
 #include <TimerOne.h>
 #include <Keypad.h>
+#include <SoftwareSerial.h>
 
 #define Trig 2
 #define Echo 3
@@ -23,6 +24,8 @@ byte colPins[4] = {39, 37, 35, 33};
 
 Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
 
+SoftwareSerial miSerial(15, 14);
+
 Keypad Teclado = Keypad(makeKeymap(hexaKeys), rowPins, colPins, 4, 4);
 
 const float VelSon = 34000.0;
@@ -35,6 +38,7 @@ char Tecla='P';
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
+  miSerial.begin(115200);
   pinMode(Trig, OUTPUT);
   pinMode(Echo, INPUT);
 
@@ -78,6 +82,7 @@ void loop() {
   Serial.print(Distancia);
   Serial.print("cm");
   Serial.println();
+  miSerial.write(Distancia);
  
   if(Distancia >=10 && Distancia <15){
     tft.fillScreen(ST77XX_GREEN); 
